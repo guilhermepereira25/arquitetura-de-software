@@ -79,6 +79,29 @@ Gêneros (se implementado)
 - PUT /generos/:id
 - DELETE /generos/:id
 
+HATEOAS / Hyperlinks
+- As respostas desta API incluem links HATEOAS (hyperlinks) que apontam para o próprio recurso e para recursos relacionados.
+- Isso facilita a descoberta de ações possíveis e a navegação entre recursos sem que o cliente precise conhecer todas as rotas previamente.
+
+Exemplo de resposta para um filme (GET /filmes/:id):
+
+```json
+{
+  "id": 1,
+  "titulo": "Exemplo",
+  "anoLancamento": 2023,
+  "generoId": 1,
+  "_links": [
+    { "rel": "self", "href": "http://localhost:3000/filmes/1" },
+    { "rel": "create", "method": "POST", "href": "http://localhost:3000/filmes" },
+    { "rel": "update", "method": "PUT", "href": "http://localhost:3000/filmes/1" },
+    { "rel": "delete", "method": "DELETE", "href": "http://localhost:3000/filmes/1" },
+    { "rel": "genero", "href": "http://localhost:3000/generos/1" },
+    { "rel": "atores", "href": "http://localhost:3000/filmes/1/atores" }
+  ]
+}
+```
+
 ## Exemplos rápidos com curl
 Listar filmes:
 

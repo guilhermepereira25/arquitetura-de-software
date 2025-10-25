@@ -1,5 +1,7 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { FilmeService } from "../services/filmeService.js";
+import { addFilmeLinks, addAtorLinks } from "../helpers/hateoasHelper.js";
+import { AppRequest as Request } from "../types.js";
 
 export class FilmeController {
   private readonly filmeService: FilmeService;
@@ -10,7 +12,7 @@ export class FilmeController {
 
   getAll = (req: Request, res: Response) => {
     const filmes = this.filmeService.getAllFilmes();
-    res.json(filmes);
+    res.json(filmes.map(f => addFilmeLinks(f, req.hateoasBase)));
   };
 
   getById = (req: Request, res: Response) => {
@@ -21,7 +23,7 @@ export class FilmeController {
     const id = parseInt(req.params.id);
     const filme = this.filmeService.getFilmeById(id);
     if (filme) {
-      res.json(filme);
+      res.json(addFilmeLinks(filme, req.hateoasBase));
     } else {
       res.status(404).json({ message: "Filme not found" });
     }
@@ -30,7 +32,7 @@ export class FilmeController {
   create = (req: Request, res: Response) => {
     const filme = req.body;
     const newFilme = this.filmeService.createFilme(filme);
-    res.status(201).json(newFilme);
+    res.status(201).json(addFilmeLinks(newFilme, req.hateoasBase));
   };
 
   update = (req: Request, res: Response) => {
@@ -42,7 +44,7 @@ export class FilmeController {
     const filme = req.body;
     const updatedFilme = this.filmeService.updateFilme(id, filme);
     if (updatedFilme) {
-      res.json(updatedFilme);
+      res.json(addFilmeLinks(updatedFilme, req.hateoasBase));
     } else {
       res.status(404).json({ message: "Filme not found" });
     }
@@ -69,7 +71,7 @@ export class FilmeController {
     }
     const id = parseInt(req.params.id);
     const atores = this.filmeService.getAtoresByFilmeId(id);
-    res.json(atores);
+    res.json(atores.map(a => addAtorLinks(a, req.hateoasBase)));
   };
 
   addAtor = (req: Request, res: Response) => {

@@ -1,0 +1,9 @@
+type Genero {
+    id: ID!
+    nome: String!
+    filmes: [Filme!]!
+}
+
+input GeneroInput {
+    nome: String!
+}

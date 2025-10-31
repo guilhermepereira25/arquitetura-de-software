@@ -1,0 +1,5 @@
+input CriarFilmeInput {
+    titulo: String!
+    diretor: String!
+    anoLancamento: Int!
+}

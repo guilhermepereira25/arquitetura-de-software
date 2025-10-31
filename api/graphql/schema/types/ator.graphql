@@ -1,0 +1,13 @@
+type Ator {
+    id: ID!
+    nome: String!
+    dataNascimento: String!
+    nacionalidade: String
+    filmes: [Filme!]!
+}
+
+input AtorInput {
+    nome: String!
+    dataNascimento: String!
+    nacionalidade: String
+}

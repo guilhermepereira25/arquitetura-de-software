@@ -1,0 +1,4 @@
+type Query {
+    generos: [Genero!]!
+    genero(id: ID!): Genero
+}

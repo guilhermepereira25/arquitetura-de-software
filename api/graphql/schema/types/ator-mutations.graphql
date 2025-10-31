@@ -1,0 +1,5 @@
+type Mutation {
+    criarAtor(input: AtorInput!): Ator!
+    atualizarAtor(id: ID!, input: AtorInput!): Ator!
+    excluirAtor(id: ID!): Boolean!
+}

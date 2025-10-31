@@ -1,0 +1,9 @@
+type Mutation {
+    criarFilme(input: CriarFilmeInput!): Filme!
+    atualizarFilme(id: ID!, input: CriarFilmeInput!): Filme!
+    excluirFilme(id: ID!): Boolean!
+    adicionarAtoresEmFilme(filmeId: ID!, atorIds: [ID!]!): Filme!
+    removerAtorDeFilme(filmeId: ID!, atorId: ID!): Filme!
+    adicionarGeneroEmFilme(filmeId: ID!, generoId: ID!): Filme!
+    removerGeneroDeFilme(filmeId: ID!, generoId: ID!): Filme!
+}

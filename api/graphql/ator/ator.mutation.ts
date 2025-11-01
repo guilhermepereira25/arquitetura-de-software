@@ -1,16 +1,16 @@
 import { AtorInput } from "../types";
-import { createAtor, updateAtor, deleteAtor } from "../ator/ator.service";
+import { atorService } from '../container';
 
 export const atorMutationsResolvers = {
     Mutation: {
-        criarAtor: (_: any, { input }: { input: AtorInput }) => {
-            return createAtor(input);
+        criarAtor: async (_: any, { input }: { input: AtorInput }) => {
+            return atorService.create(input);
         },
-        atualizarAtor: (_: any, { id, input }: { id: string, input: AtorInput }) => {
-            return updateAtor(id, input);
+        atualizarAtor: async (_: any, { id, input }: { id: number, input: Partial<AtorInput> }) => {
+            return atorService.update(id, input);
         },
-        excluirAtor: (_: any, { id }: { id: string }) => {
-            return deleteAtor(id);
+        excluirAtor: async (_: any, { id }: { id: number }) => {
+            return atorService.delete(id);
         },
     }
 }

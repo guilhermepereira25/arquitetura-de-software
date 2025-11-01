@@ -1,26 +1,41 @@
-import * as atorRepository from "../ator/ator.repository";
-import { Ator, AtorInput } from "../types";
+import { FilmeService } from '../filme/filme.service';
+import { IAtorRepository } from '../repositories/interfaces';
+import { Ator, AtorInput, Filme } from '../types';
 
-export const findAllAtores = (): Ator[] => {
-    return atorRepository.findAllAtores();
-}
+export class AtorService {
+  constructor(private atorRepository: IAtorRepository, private filmeService: FilmeService) {} // TODO: inject FilmeService
 
-export const findAtorById = (id: string): Ator | null => {
-    return atorRepository.findAtorById(id);
-}
+  async findAll(): Promise<Ator[]> {
+    return this.atorRepository.findAll();
+  }
 
-export const createAtor = (input: AtorInput): Ator => {
-    return atorRepository.createAtor(input);
-}
+  async findById(id: number): Promise<Ator | null> {
+    return this.atorRepository.findById(id);
+  }
 
-export const updateAtor = (id: string, input: AtorInput): Ator | null => {
-    return atorRepository.updateAtor(id, input);
-}
+  async create(input: AtorInput): Promise<Ator> {
+    return this.atorRepository.create(input);
+  }
 
-export const deleteAtor = (id: string): boolean => {
-    return atorRepository.deleteAtor(id);
-}
+  async update(id: number, input: Partial<AtorInput>): Promise<Ator | null> {
+    return this.atorRepository.update(id, input);
+  }
 
-export const findAtorByIds = (ids: number[]): Ator[] => {
-    return atorRepository.findAllAtoresByIds(ids);
+  async delete(id: number): Promise<boolean> {
+    return this.atorRepository.delete(id);
+  }
+
+  async getFilmes(atorId: number): Promise<Filme[]> {
+    const filmeIds = await this.atorRepository.getFilmeIds(atorId);
+    const filmes: Filme[] = [];
+    for (const id of filmeIds) {
+      const filme = await this.filmeService.findById(id);
+      if (filme) filmes.push(filme);
+    }
+    return filmes;
+  }
+
+  async getFilmeIds(atorId: number): Promise<number[]> {
+    return this.atorRepository.getFilmeIds(atorId);
+  }
 }

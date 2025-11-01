@@ -1,12 +1,12 @@
-import { findAllAtores, findAtorById } from "../ator/ator.service";
+import { atorService } from '../container';
 
 export const atorQueryResolvers = {
     Query: {
-        atores: () => {
-            return findAllAtores();
+        atores: async () => {
+            return atorService.findAll();
         },
-        ator: (_: any, { id }: { id: string }) => {
-            return findAtorById(id);
+        ator: async (_: any, { id }: { id: number }) => {
+            return atorService.findById(id);
         },
     },
 };

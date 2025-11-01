@@ -1,64 +1,61 @@
-import { atorResolvers } from "./ator.resolvers";
+import { filmeResolvers } from "./filme.resolvers";
+import { filmeService } from "../container";
+import { atorService } from "../container";
+import { generoService } from "../container";
 import { generoResolvers } from "./genero.resolvers";
-import { findAtoresByFilmeId, findFilmesByAtorId } from "../repositories/filme-ator.repository";
-import { findGenerosByFilmeId, findFilmesByGeneroId } from "../repositories/filme-genero.repository";
-import { findAtorById } from "../ator/ator.repository";
-import { findGeneroById } from "../genero/genero.repository";
-import { findFilmeById } from "../filme/filme.repository";
-import { filmeQueryResolvers } from "../filme/filme.queries";
-import { filmeMutationsResolvers } from "../filme/filme.mutation";
+import { atorResolvers } from "./ator.resolvers";
 
 export const resolvers = {
     Query: {
-        ...filmeQueryResolvers.Query,
+        ...filmeResolvers.Query,
         ...atorResolvers.Query,
         ...generoResolvers.Query,
     },
     Mutation: {
-        ...filmeMutationsResolvers.Mutation,
+        ...filmeResolvers.Mutation,
         ...atorResolvers.Mutation,
         ...generoResolvers.Mutation,
     },
-    Filme: {
-        atores: (parent: any) => {
-            const atorIds = findAtoresByFilmeId(parent.id.toString());
-            const atores = [];
-            for (const atorId of atorIds) {
-                const ator = findAtorById(atorId.toString());
-                if (ator) atores.push(ator);
-            }
-            return atores;
-        },
-        generos: (parent: any) => {
-            const generoIds = findGenerosByFilmeId(parent.id.toString());
-            const generos = [];
-            for (const generoId of generoIds) {
-                const genero = findGeneroById(generoId.toString());
-                if (genero) generos.push(genero);
-            }
-            return generos;
-        },
+  Filme: {
+    atores: async (parent: any) => {
+      const atorIds = await filmeService.getAtorIds(parent.id);
+      const atores = [];
+      for (const atorId of atorIds) {
+        const ator = await atorService.findById(atorId);
+        if (ator) atores.push(ator);
+      }
+      return atores;
     },
-    Ator: {
-        filmes: (parent: any) => {
-            const filmeIds = findFilmesByAtorId(parent.id.toString());
-            const filmes = [];
-            for (const filmeId of filmeIds) {
-                const filme = findFilmeById(filmeId.toString());
-                if (filme) filmes.push(filme);
-            }
-            return filmes;
-        },
+    generos: async (parent: any) => {
+      const generoIds = await filmeService.getGeneroIds(parent.id);
+      const generos = [];
+      for (const generoId of generoIds) {
+        const genero = await generoService.findById(generoId);
+        if (genero) generos.push(genero);
+      }
+      return generos;
     },
-    Genero: {
-        filmes: (parent: any) => {
-            const filmeIds = findFilmesByGeneroId(parent.id.toString());
-            const filmes = [];
-            for (const filmeId of filmeIds) {
-                const filme = findFilmeById(filmeId.toString());
-                if (filme) filmes.push(filme);
-            }
-            return filmes;
-        },
+  },
+  Ator: {
+    filmes: async (parent: any) => {
+      const filmeIds = await atorService.getFilmeIds(parent.id);
+      const filmes = [];
+      for (const filmeId of filmeIds) {
+        const filme = await filmeService.findById(filmeId);
+        if (filme) filmes.push(filme);
+      }
+      return filmes;
     },
+  },
+  Genero: {
+    filmes: async (parent: any) => {
+      const filmeIds = await generoService.getFilmeIds(parent.id);
+      const filmes = [];
+      for (const filmeId of filmeIds) {
+        const filme = await filmeService.findById(filmeId);
+        if (filme) filmes.push(filme);
+      }
+      return filmes;
+    },
+  },
 };

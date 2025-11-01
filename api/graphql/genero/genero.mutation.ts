@@ -1,22 +1,22 @@
 import { GeneroInput } from "../types";
-import { createGenero, updateGenero, deleteGenero } from "../genero/genero.service";
-import { addGenerosToFilme } from "../repositories/filme-genero.repository";
-import { findFilmeById } from "../filme/filme.repository";
+import { generoService, filmeService } from '../container';
 
 export const generoMutationsResolvers = {
     Mutation: {
-        criarGenero: (_: any, { input }: { input: GeneroInput }) => {
-            return createGenero(input);
+        criarGenero: async (_: any, { input }: { input: GeneroInput }) => {
+            return generoService.create(input);
         },
-        atualizarGenero: (_: any, { id, input }: { id: string, input: GeneroInput }) => {
-            return updateGenero(id, input);
+        atualizarGenero: async (_: any, { id, input }: { id: number, input: Partial<GeneroInput> }) => {
+            return generoService.update(id, input);
         },
-        excluirGenero: (_: any, { id }: { id: string }) => {
-            return deleteGenero(id);
+        excluirGenero: async (_: any, { id }: { id: number }) => {
+            return generoService.delete(id);
         },
-        adicionarGenerosEmFilme: (_: any, { filmeId, generoIds }: { filmeId: string, generoIds: string[] }) => {
-            addGenerosToFilme(filmeId, generoIds);
-            return findFilmeById(filmeId);
+        adicionarGenerosEmFilme: async (_: any, { filmeId, generoIds }: { filmeId: number, generoIds: number[] }) => {
+            for (const generoId of generoIds) {
+                await filmeService.addGenero(filmeId, generoId);
+            }
+            return filmeService.findById(filmeId);
         },
     }
 }

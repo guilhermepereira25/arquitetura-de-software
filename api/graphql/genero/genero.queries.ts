@@ -1,12 +1,12 @@
-import { findAllGeneros, findGeneroById } from "../genero/genero.service";
+import { generoService } from '../container';
 
 export const generoQueryResolvers = {
     Query: {
-        generos: () => {
-            return findAllGeneros();
+        generos: async () => {
+            return generoService.findAll();
         },
-        genero: (_: any, { id }: { id: string }) => {
-            return findGeneroById(id);
+        genero: async (_: any, { id }: { id: number }) => {
+            return generoService.findById(id);
         },
     },
 };

@@ -31,8 +31,8 @@ export type CriarFilmeInput = {
     titulo: string;
     diretor: string;
     anoLancamento: number;
-    generoIds: number[];
-    atorIds: number[];
+    generoIds: string[];
+    atorIds: string[];
 }
 
 export type AtorInput = {

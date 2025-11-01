@@ -1,65 +1,50 @@
-import { CriarFilmeInput, Filme } from "../types";
-import * as filmeRepository from "../filme/filme.repository";
-import * as filmeGeneroRepository from "../repositories/filme-genero.repository";
-import * as filmeAtorRepository from "../repositories/filme-ator.repository";
+import { IFilmeRepository } from '../repositories/interfaces';
+import { CriarFilmeInput, Filme } from '../types';
 
-export const createFilme = (input: CriarFilmeInput) => {
-    const filme: Omit<Filme, "id"> = {
-        titulo: input.titulo,
-        diretor: input.diretor,
-        anoLancamento: input.anoLancamento,
-    };
-    return filmeRepository.createFilme(filme);
-}
+export class FilmeService {
+  constructor(private filmeRepository: IFilmeRepository) {}
 
-export const addGeneroToFilme = (filmeId: string, generoId: number) => {
-    const filme = filmeRepository.findFilmeById(filmeId);
-    if (!filme) {
-        throw new Error("Filme not found");
-    }
-    filmeGeneroRepository.addGenerosToFilme(filme.id.toString(), [generoId.toString()]);
-    return filme;
-}
+  async findAll(): Promise<Filme[]> {
+    return this.filmeRepository.findAll();
+  }
 
-export const addAtoresToFilme = (filmeId: string, atorIds: number[]) => {
-    const filme = filmeRepository.findFilmeById(filmeId);
-    if (!filme) {
-        throw new Error("Filme not found");
-    }
-    filmeAtorRepository.addAtoresToFilme(filmeId, atorIds.map(id => id.toString()));
-    return filme;
-}
+  async findById(id: number): Promise<Filme | null> {
+    return this.filmeRepository.findById(id);
+  }
 
-export const removeAtorFromFilme = (filmeId: string, atorId: number) => {
-    const filme = filmeRepository.findFilmeById(filmeId);
-    if (!filme) {
-        throw new Error("Filme not found");
-    }
-    filmeAtorRepository.removeAtorFromFilme(filmeId, atorId.toString());
-    return filme;
-}
+  async create(input: CriarFilmeInput): Promise<Filme> {
+    return this.filmeRepository.create(input);
+  }
 
-export const removeGeneroFromFilme = (filmeId: string, generoId: number) => {
-    const filme = filmeRepository.findFilmeById(filmeId);
-    if (!filme) {
-        throw new Error("Filme not found");
-    }
-    filmeGeneroRepository.removeGeneroFromFilme(filmeId, generoId.toString());
-    return filme;
-}
+  async update(id: number, input: Partial<CriarFilmeInput>): Promise<Filme | null> {
+    return this.filmeRepository.update(id, input);
+  }
 
-export const findAllFilmes = (): Filme[] => {
-    return filmeRepository.findAllFilmes();
-}
+  async delete(id: number): Promise<boolean> {
+    return this.filmeRepository.delete(id);
+  }
 
-export const findFilmeById = (id: string): Filme | null => {
-    return filmeRepository.findFilmeById(id);
-}
+  async addAtor(filmeId: number, atorId: number): Promise<void> {
+    return this.filmeRepository.addAtor(filmeId, atorId);
+  }
 
-export const updateFilme = (id: string, input: CriarFilmeInput): Filme | null => {
-    return filmeRepository.updateFilme(id, input);
-}
+  async removeAtor(filmeId: number, atorId: number): Promise<void> {
+    return this.filmeRepository.removeAtor(filmeId, atorId);
+  }
 
-export const deleteFilme = (id: string): boolean => {
-    return filmeRepository.deleteFilme(id);
+  async addGenero(filmeId: number, generoId: number): Promise<void> {
+    return this.filmeRepository.addGenero(filmeId, generoId);
+  }
+
+  async removeGenero(filmeId: number, generoId: number): Promise<void> {
+    return this.filmeRepository.removeGenero(filmeId, generoId);
+  }
+
+  async getAtorIds(filmeId: number): Promise<number[]> {
+    return this.filmeRepository.getAtorIds(filmeId);
+  }
+
+  async getGeneroIds(filmeId: number): Promise<number[]> {
+    return this.filmeRepository.getGeneroIds(filmeId);
+  }
 }

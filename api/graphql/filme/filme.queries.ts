@@ -1,12 +1,12 @@
-import { findAllFilmes, findFilmeById } from "../filme/filme.service.js";
+import { filmeService } from '../container';
 
 export const filmeQueryResolvers = {
     Query: {
-        filmes: () => {
-            return findAllFilmes();
+        filmes: async () => {
+            return filmeService.findAll();
         },
-        filme: (_: any, { id }: { id: string }) => {
-            return findFilmeById(id);
+        filme: async (_: any, { id }: { id: number }) => {
+            return filmeService.findById(id);
         },
     },
 };

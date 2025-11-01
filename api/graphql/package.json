@@ -5,8 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node index.ts"
+    "start:dev": "tsx watch server.ts",
+    "start:dev:prisma": "USE_PRISMA=true tsx watch server.ts",
+    "start": "USE_PRISMA=false tsx server.ts",
+    "start:prisma": "USE_PRISMA=true tsx server.ts"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +18,10 @@
     "@apollo/server": "^5.1.0",
     "@graphql-tools/load-files": "^7.0.1",
     "@graphql-tools/merge": "^9.1.2",
-    "graphql": "^16.11.0"
+    "@prisma/client": "^6.18.0",
+    "dotenv": "^17.2.3",
+    "graphql": "^16.11.0",
+    "prisma": "^6.18.0"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
